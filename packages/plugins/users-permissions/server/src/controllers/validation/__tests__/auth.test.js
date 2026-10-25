@@ -503,6 +503,30 @@ describe('user-permissions auth', () => {
         },
         expectedMessage: 'Your new password must be different than your current password',
       },
+      {
+        description: 'Succeeds when password and passwordConfirmation match',
+        body: {
+          currentPassword: 'CorrectPassword123',
+          password: 'NewPass1',
+          passwordConfirmation: 'NewPass1',
+        },
+        expectedResponse: {
+          jwt: 'fake-jwt-token-for-user-1',
+          user: {
+            id: 1,
+            password: expect.any(String),
+          },
+        },
+      },
+      {
+        description: 'Fails when password and passwordConfirmation do not match',
+        body: {
+          currentPassword: 'CorrectPassword123',
+          password: 'NewPass1',
+          passwordConfirmation: 'DiffPass1',
+        },
+        expectedMessage: 'Passwords do not match',
+      },
     ];
 
     test.each(changePasswordCases)(
