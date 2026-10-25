@@ -105,6 +105,12 @@ describe('applyWhere - LIKE operator escaping', () => {
       expect(bindings).toContain('%\\%%');
     });
 
+    test('$containsi compiles with wildcards on both ends', () => {
+      const { bindings } = compile(client, { handle: { $containsi: 'news' } });
+
+      expect(bindings).toContain('%news%');
+    });
+
     test(`${isSqlite ? 'adds' : 'omits'} an explicit ESCAPE clause for LIKE operators`, () => {
       const { sql } = compile(client, { handle: { $containsi: 'x' } });
 
